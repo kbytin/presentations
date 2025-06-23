@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI is not a Killer Feature</title>
+  <!-- JQUERY AND MARQUEE FOR SUPER 90s VIBES -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      scroll-snap-type: y mandatory;
+      overflow-x: hidden;
+      background: url('https://www.11secondclub.com/images/bg_stars.gif');
+      color: yellow;
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur222.cur'), auto;
+    }
+
+    .blink {
+      animation: blink-animation 1s steps(2, start) 3;
+      animation-iteration-count: 3;
+    }
+    @keyframes blink-animation {
+      to { visibility: hidden; }
+    }
+
+    /* High contrast text for accessibility */
+    .intro-text {
+      background: black;
+      color: yellow; /* WCAG AAA contrast */
+      font-weight: bold;
+      font-size: 2.8rem;
+      margin-bottom: 1.2rem;
+      padding: 15px;
+      border: 3px solid white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+      text-align: center;
+      display: block;
+    }
+
+    .slide {
+      scroll-snap-align: start;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem;
+      position: relative;
+      border: 10px ridge lime;
+    }
+
+    .content {
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      max-width: 70%;
+      box-shadow: 0 0 30px lime;
+      font-size: 2rem;
+      border: 5px outset hotpink;
+    }
+
+    .intro {
+      background: url('gopniki.png') center center / cover no-repeat;
+    }
+
+    .intro::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+    }
+
+    /* Accessibility-friendly intro content box */
+    .intro .content {
+      background: rgba(0,0,0,0.0);
+      border: 5px solid gold;
+      box-shadow: 0 0 20px white;
+      z-index: 2;
+    }
+
+    h1, h2 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px magenta, -2px -2px 4px cyan;
+    }
+
+    ul {
+      list-style-image: url('https://web.archive.org/web/20091027005705/http://geocities.com/Area51/Chamber/7118/images/bullet.gif');
+      padding-left: 1.5rem;
+      text-align: left;
+    }
+
+    li {
+      margin-bottom: 1rem;
+    }
+
+    iframe {
+      margin-top: 2rem;
+      width: 80%;
+      height: 400px;
+      border: 10px groove lime;
+    }
+
+    .gif {
+      margin-top: 2rem;
+      max-height: 200px;
+      border: 3px dashed hotpink;
+    }
+
+    /* Accessible but still fun button */
+    #startBtn {
+      font-size: 2.8rem;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      background: #9900cc; /* Solid background */
+      border: 4px solid white;
+      color: yellow; /* High contrast */
+      cursor: pointer;
+      margin-top: 2rem;
+      font-family: 'Comic Sans MS', cursive;
+      text-shadow: 2px 2px 0 black;
+      box-shadow: 0 0 15px rgba(255,255,255,0.7);
+      border-radius: 8px;
+      position: relative;
+      z-index: 10;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    #startBtn:hover {
+      background: #cc00ff;
+      transform: scale(1.1);
+    }
+
+    .fireworks-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .marquee-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        #000000,
+        #000000 10px,
+        #ffdd00 10px,
+        #ffdd00 20px
+      );
+      color: #ffff00;
+      font-size: 28px;
+      font-weight: bold;
+      z-index: 1000;
+      padding: 10px;
+      border-top: 5px solid red;
+      text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+    }
+
+    #counter {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: black;
+      color: lime;
+      padding: 0.5rem 1rem;
+      z-index: 999;
+      font-size: 2rem;
+      border: 5px outset cyan;
+      font-family: 'Comic Sans MS', cursive;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #counter:hover {
+      background: red;
+      transform: scale(1.1);
+      box-shadow: 0 0 15px yellow;
+    }
+
+    #counter:active {
+      transform: scale(0.95);
+      background: darkred;
+      border-style: inset;
+    }
+
+    #counter.highlight {
+      background-color: red;
+      transform: scale(1.5) rotate(10deg);
+    }
+
+    .audio-playing {
+      position: fixed;
+      bottom: 50px;
+      right: 20px;
+      background: black;
+      color: lime;
+      padding: 10px 15px;
+      border-radius: 5px;
+      z-index: 100;
+      border: 3px outset cyan;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* UNDER CONSTRUCTION GIF */
+    .under-construction {
+      position: fixed;
+      bottom: 50px;
+      left: 20px;
+      width: 150px;
+      height: 150px;
+      z-index: 999;
+    }
+
+    /* Navigation buttons */
+    .nav-buttons {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 999;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: black;
+      color: lime;
+      border: 3px outset cyan;
+      padding: 0.5rem 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-family: 'Comic Sans MS', cursive;
+      user-select: none;
+    }
+
+    .nav-btn:hover {
+      background: purple;
+      color: yellow;
+    }
+
+    .nav-btn:active {
+      border-style: inset;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter" class="blink">SLIDE 1/9</div>
+  <div id="audioIndicator" class="audio-playing" style="display:none;">🔊 WOW!</div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn">⬅️ PREV</button>
+    <button class="nav-btn" id="nextBtn">NEXT ➡️</button>
+  </div>
+
+  <div id="fireworksContainer" class="fireworks-container"></div>
+
+  <div class="marquee-container">
+    <div class="marquee">⚠️ AI WILL NOT DO YOUR JOB ⚠️ AI WILL NOT DO YOUR JOB ⚠️ AI WILL NOT DO YOUR JOB ⚠️ AI WILL NOT DO YOUR JOB ⚠️ AI WILL NOT DO YOUR JOB ⚠️ AI WILL NOT DO YOUR JOB ⚠️ </div>
+  </div>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Under_construction_graphic.gif" class="under-construction">
+
+  <div class="slide intro">
+    <div class="content">
+      <div class="intro-text blink">
+        🤑 It looks like AI will help everyone get RICH!
+      </div>
+      <div class="intro-text">
+        🤖 Just use ChatGPT and solve ANY problem...
+      </div>
+      <div class="intro-text">
+        💸 Money will flow to you without ANY effort!
+      </div>
+      <button id="startBtn" class="blink">But there is a catch...</button>
+    </div>
+  </div>
+
+  <div class="slide"><div class="content">
+    <h1 class="rainbow-text">🤖 AI is NOT a Killer Feature (Sorry)</h1>
+    <img class="gif" src="https://i.pinimg.com/originals/ea/1e/c5/ea1ec58b67e92c3455f24c7cfb937966.gif" alt="Dancing Gopnik" style="max-height: 400px; width: auto;">
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">AI is a Powerful Tool — Not a Master 🧹</h2>
+    <ul>
+      <li>It serves best when you ask the right questions</li>
+      <li>It performs well when guided by your rules</li>
+      <li>It supports you — but you stay in control</li>
+    </ul>
+    <img class="gif" src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="Obey" />
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">A Valuable Sparring Partner 🥊</h2>
+    <ul>
+      <li>Stimulates deeper thinking</li>
+      <li>Surfaces edge cases</li>
+      <li>Challenges architectural decisions constructively</li>
+    </ul>
+    <img class="gif" src="https://media.giphy.com/media/3ohs4BSacFKI7A717y/giphy.gif" alt="Sparring" />
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">AI as Your Legacy Whisperer 🧠</h2>
+    <ul>
+      <li> "Given this legacy Redux structure, how can I safely introduce a new feature without making the mess worse?"
+        → Helps design in harmony with the existing chaos, not against it.</li>
+      <li> "Review this connected component — what smells or anti-patterns should I watch for before building something similar?"
+        → Detects legacy traps before you fall into them again.</li>
+      <li> "Suggest a clean, testable pattern to add a new UI component that interacts with this old Redux store."
+        → Bridges modern best practices with old constraints.</li>
+    </ul>
+  </div></div>
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">How AI Supports React Developers ⚛️</h2>
+    <ul>
+      <li>Breaks down large, tangled components into smaller, reusable pieces</li>
+      <li>Analyzes test files and identifies what's missing</li>
+      <li>Proposes clearer, more expressive naming for components, props, and variables</li>
+    </ul>
+    <img class="gif" src="https://media.giphy.com/media/fAnEC88LccN7a/giphy.gif" alt="React Help" />
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">Cursor + GPT = ❤️‍🔥 Your Superpowered Pair Programmer</h2>
+    <ul>
+      <li>Understands your codebase contextually — not just the open file</li>
+      <li>Tracks logic across files, components, and Redux flows</li>
+      <li>Adapts to your naming, patterns, and architecture rules</li>
+    </ul>
+    <img class="gif" src="https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif" alt="Magic" />
+
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <div>
+      <h3>Examples</h3>
+      <ul>
+        <li>"Refactor this component and update all connected Redux logic — follow existing conventions."</li>
+        <li>"Add types to this slice, based on how it's used across the app."</li>
+      </ul>
+      <div>
+        Enforce naming conventions
+        → e.g. All selectors must end with Selector (productSelector, cartSelector)
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">Cursor Rules 📏 — Your Team, Your Standards</h2>
+    <ul>
+      <li>Cursor Rules 📏 — Your Team, Your Standards</li>
+      <li>Keep file structure clean and predictable</li>
+      <li>Prevent common anti-patterns (e.g. direct async in useEffect)"</li>
+    </ul>
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text">Cursor 0.45 Update 🆕</h2>
+    <ul>
+      <li>.cursorrules ➜ now lives in .cursor/rules</li>
+      <li>Smarter and more flexible rule parsing</li>
+      <li>Better support for team workflows and collaboration</li>
+      <li>Rules can now be more granular and precise ✨</li>
+    </ul>
+    <img class="gif" src="https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif" alt="Upgrade" />
+  </div></div>
+
+  <div class="slide"><div class="content">
+    <h2 class="rainbow-text blink">Thank you! 🔥</h2>
+    <p>Any questions?</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Spinning_Dancer.gif" height="150">
+  </div></div>
+
+  <audio id="wowSound" src="wow-male-voice-65342.mp3" preload="auto"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/index.umd.js"></script>
+  <script>
+    $(document).ready(function() {
+      // ULTRA 90s MARQUEE
+      $('.marquee').marquee({
+        duration: 10000,
+        gap: 50,
+        delayBeforeStart: 0,
+        direction: 'left',
+        duplicated: true
+      });
+
+      // Set up AMAZING fireworks
+      const fireworks = new Fireworks.default(document.getElementById('fireworksContainer'), {
+        intensity: 50,
+        explosion: 15,
+        particles: 200,
+        traceSpeed: 10,
+        rocketsPoint: {
+          min: 0,
+          max: 100
+        }
+      });
+
+      // Track state in the most 90s way possible - GLOBAL VARS!!!
+      let SUPER_STARTED = false;
+      let CURRENT_SLIDE = 0;
+      const TOTAL_SLIDES = $('.slide').length;
+      let IS_SCROLLING = false;  // Track scroll state
+
+      // Set initial counter
+      $('#counter').text('SLIDE 1/' + TOTAL_SLIDES);
+
+      // AWESOME sound function that TOTALLY works
+      function playWOWSound() {
+        // Play sound with jQuery for MAXIMUM 90s
+        $('#wowSound')[0].currentTime = 0;
+        $('#wowSound')[0].volume = 1.0;
+
+        // Play with promise
+        const playPromise = $('#wowSound')[0].play();
+
+        // Show indicator with JQUERY EFFECTS!!
+        $('#audioIndicator').text('🔊 WOW!!!').show().fadeIn(100).fadeOut(2000);
+
+        // Catch errors like it's 1999
+        if (playPromise !== undefined) {
+          playPromise.catch(function(error) {
+            console.log('SOUND ERROR!!!! Click something!!!', error);
+            alert('CLICK ANYWHERE TO ENABLE SOUNDS!!!');
+          });
+        }
+      }
+
+      // AMAZING fireworks function
+      function launchFireworks() {
+        fireworks.stop();
+        fireworks.start();
+
+        // Stop after 2 seconds - enough time to BLOW YOUR MIND!
+        setTimeout(function() {
+          fireworks.stop();
+        }, 2000);
+      }
+
+      // Update slide counter with EXTREME 90s effects
+      function updateAwesomeCounter(slideNum) {
+        $('#counter').text('SLIDE ' + (slideNum + 1) + '/' + TOTAL_SLIDES);
+
+        // Apply highlight class
+        $('#counter').addClass('highlight');
+
+        // Remove highlight after delay
+        setTimeout(function() {
+          $('#counter').removeClass('highlight');
+        }, 1000);
+
+        // Add jQuery effects for maximum 90s impact
+        $('#counter').stop(true, true)
+          .fadeOut(50).fadeIn(50).fadeOut(50).fadeIn(50);
+      }
+
+      // NEW FUNCTION TO GO TO A SPECIFIC SLIDE
+      function goToSlide(slideNum) {
+        // Don't do anything if we're already scrolling
+        if (IS_SCROLLING) return;
+
+        // Validate slide number
+        if (slideNum < 0) slideNum = 0;
+        if (slideNum >= TOTAL_SLIDES) slideNum = TOTAL_SLIDES - 1;
+
+        // Set scrolling flag
+        IS_SCROLLING = true;
+
+        // Update the current slide
+        CURRENT_SLIDE = slideNum;
+
+        // Update counter, play sounds, etc.
+        updateAwesomeCounter(CURRENT_SLIDE);
+        playWOWSound();
+        launchFireworks();
+
+        // Scroll to the slide
+        $('html, body').animate({
+          scrollTop: slideNum * $(window).height()
+        }, 800, function() {
+          // Reset scrolling flag when animation completes
+          setTimeout(function() {
+            IS_SCROLLING = false;
+          }, 100);
+        });
+
+        // Add random rotation
+        $('.slide').eq(slideNum).find('.content')
+          .css('transform', 'rotate(' + (Math.random() * 4 - 2) + 'deg)');
+      }
+
+      // Go to next slide function
+      function goToNextSlide() {
+        goToSlide(CURRENT_SLIDE + 1);
+      }
+
+      // Go to previous slide function
+      function goToPrevSlide() {
+        goToSlide(CURRENT_SLIDE - 1);
+      }
+
+      // START BUTTON - SUPER IMPORTANT
+      $('#startBtn').on('click', function() {
+        SUPER_STARTED = true;
+        $(this).hide();
+
+        // Play sound and fireworks because it's AWESOME
+        playWOWSound();
+        launchFireworks();
+
+        // Go to first content slide
+        setTimeout(function() {
+          goToSlide(1);
+        }, 1000);
+
+        // Make counter blink faster!!
+        $('#counter').css('animation', 'blink-animation 0.3s steps(2, start) infinite');
+      });
+
+      // Scroll event with jQuery because WHY NOT
+      $(window).on('scroll', function() {
+        if (!SUPER_STARTED || IS_SCROLLING) return;
+
+        // Calculate current slide 90s STYLE
+        const newSlide = Math.round($(window).scrollTop() / $(window).height());
+
+        // Did we change slides? AMAZING!
+        if (newSlide !== CURRENT_SLIDE) {
+          CURRENT_SLIDE = newSlide;
+          updateAwesomeCounter(CURRENT_SLIDE);
+          playWOWSound();
+          launchFireworks();
+
+          // Add random rotation to current slide for EXTREME 90s effects
+          $('.slide').eq(CURRENT_SLIDE).find('.content')
+            .css('transform', 'rotate(' + (Math.random() * 4 - 2) + 'deg)');
+        }
+      });
+
+      // SIMPLE CLICK HANDLERS THAT ACTUALLY WORK
+      $('#counter').on('click', function() {
+        if (!SUPER_STARTED) {
+          $('#startBtn').click();
+          return;
+        }
+        goToNextSlide();
+      });
+
+      // Navigation button click handlers
+      $('#nextBtn').on('click', function() {
+        if (!SUPER_STARTED) {
+          $('#startBtn').click();
+          return;
+        }
+        goToNextSlide();
+      });
+
+      $('#prevBtn').on('click', function() {
+        if (!SUPER_STARTED) {
+          $('#startBtn').click();
+          return;
+        }
+        goToPrevSlide();
+      });
+
+      // Add keyboard navigation for POWER USERS
+      $(document).on('keydown', function(e) {
+        if (!SUPER_STARTED) return;
+
+        if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          goToNextSlide();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          goToPrevSlide();
+        }
+      });
+
+      // Make sure audio is unlocked for MAXIMUM EXPERIENCE
+      $(document).one('click', function() {
+        const sound = $('#wowSound')[0];
+        sound.play().then(function() {
+          sound.pause();
+          sound.currentTime = 0;
+        }).catch(function() {
+          console.log("Sound needs more clicking! CLICK MORE!");
+        });
+      });
+
+      // Flash the background every 3 seconds because WHY NOT
+      setInterval(function() {
+        $('body').css('background-color', '#' + Math.floor(Math.random()*16777215).toString(16));
+        setTimeout(function() {
+          $('body').css('background-color', '');
+        }, 100);
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
